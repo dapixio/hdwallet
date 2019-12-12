@@ -14,6 +14,10 @@ import {
   CosmosWalletInfo,
 } from './cosmos'
 
+import {
+  FIOWallet,
+} from './fio'
+
 import { DebugLinkWallet } from './debuglink'
 import { Transport } from './transport';
 import { isObject } from 'lodash';
@@ -109,7 +113,8 @@ type CoinWallets =
   BTCWallet |
   ETHWallet |
   CosmosWallet |
-  DebugLinkWallet
+  DebugLinkWallet |
+  FIOWallet
 
 export type Coin = string
 export type Symbol = string

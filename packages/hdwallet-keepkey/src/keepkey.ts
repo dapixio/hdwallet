@@ -7,6 +7,7 @@ import {
   Coin,
   Ping,
   Pong,
+  FIOWallet,
   BTCWallet,
   ETHWallet,
   Event,
@@ -14,6 +15,8 @@ import {
   LoadDevice,
   LONG_TIMEOUT,
   DEFAULT_TIMEOUT,
+  FIOGetAddress,
+  FIOVerifyMessage,
   BTCInputScriptType,
   BTCGetAddress,
   BTCSignTx,
@@ -58,6 +61,7 @@ import {
   translateInputScriptType,
 } from './utils'
 
+import * as Fio from "./fio";
 import * as Btc from "./bitcoin";
 import * as Eth from "./ethereum"
 import * as Cosmos from "./cosmos"
@@ -390,7 +394,7 @@ export class KeepKeyHDWalletInfo implements HDWalletInfo, BTCWalletInfo, ETHWall
     if (!description.isKnown) {
       return undefined
     }
-    
+
     let addressNList = msg.addressNList
     addressNList[2] += 1
 
@@ -401,7 +405,7 @@ export class KeepKeyHDWalletInfo implements HDWalletInfo, BTCWalletInfo, ETHWall
   }
 }
 
-export class KeepKeyHDWallet implements HDWallet, BTCWallet, ETHWallet, DebugLinkWallet {
+export class KeepKeyHDWallet implements HDWallet, BTCWallet, ETHWallet, DebugLinkWallet, FIOWallet {
   _supportsETHInfo: boolean = true
   _supportsBTCInfo: boolean = true
   _supportsCosmosInfo: boolean = true
@@ -409,6 +413,7 @@ export class KeepKeyHDWallet implements HDWallet, BTCWallet, ETHWallet, DebugLin
   _isKeepKey: boolean = true;
   _supportsETH: boolean = true;
   _supportsBTC: boolean = true;
+  _supportsFIO: boolean = true;
   _supportsCosmos: boolean = true;
 
   transport: KeepKeyTransport;
@@ -926,6 +931,15 @@ export class KeepKeyHDWallet implements HDWallet, BTCWallet, ETHWallet, DebugLin
     //  return false
 
     return this.info.btcIsSameAccount(msg)
+  }
+
+
+  public async fioGetAddress (msg: FIOGetAddress): Promise<string> {
+    return Fio.fioGetAddress(this, this.transport, msg)
+  }
+
+  public async fioVerifyMessage (msg: FIOVerifyMessage): Promise<boolean> {
+    return Fio.fioVerifyMessage(this, this.transport, msg)
   }
 
 

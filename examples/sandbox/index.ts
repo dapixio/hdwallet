@@ -435,13 +435,8 @@ $getAppInfo.on('click', async (e) => {
 
 /*
       FIO
-        * segwit: false
-        * mutltisig: true
-
 */
 const $fioAddr = $('#fioAddr')
-const $fioTx = $('#fioTx')
-const $fioSign = $('#fioSign')
 const $fioVerify = $('#fioVerify')
 const $fioResults = $('#fioResults')
 
@@ -453,9 +448,9 @@ $fioAddr.on('click', async (e) => {
   if (supportsFIO(wallet)) {
 
     let res = await wallet.fioGetAddress({
-      addressNList: [0x80000000 + 44, 0x80000000 + 0, 0x80000000 + 0, 0, 0],
-      coin: "FIO",
-      scriptType: '?', // p2pkh
+      addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
+      coin: "Fio",
+      scriptType: 'p2pkh',
       showDisplay: true
     })
     $fioResults.val(res)
@@ -470,9 +465,9 @@ $fioVerify.on('click', async (e) => {
   if (!wallet) { $fioResults.val("No wallet?"); return}
   if (supportsFIO(wallet)) {
     let result = await wallet.fioVerifyMessage({
-      address: "0x2068dD92B6690255553141Dfcf00dF308281f763",
+      address: "", // todo: set fio address
       message: "Hello World",
-      signature: "61f1dda82e9c3800e960894396c9ce8164fd1526fccb136c71b88442405f7d09721725629915d10bc7cecfca2818fe76bc5816ed96a1b0cebee9b03b052980131b"
+      signature: "" // todo: set signature
     })
     $fioResults.val(result ? '✅' : '❌')
   } else {
