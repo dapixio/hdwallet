@@ -323,36 +323,42 @@ $getXpubs.on('click', async (e) => {
 
   const result = await wallet.getPublicKeys([
     {
+      addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0 ,0],
+      curve: "secp256k1",
+      showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
+      coin: "Bitcoin"
+    }
+    {
       addressNList: [0x80000000 + 44, 0x80000000 + 0, 0x80000000 + 0],
       curve: "secp256k1",
       showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
       coin: "Bitcoin"
-    },
-    {
-      addressNList: [0x80000000 + 44, 0x80000000 + 0, 0x80000000 + 1],
-      curve: "secp256k1",
-      showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
-      coin: "Bitcoin"
-    },
-    {
-      addressNList: [0x80000000 + 49, 0x80000000 + 0, 0x80000000 + 0],
-      curve: "secp256k1",
-      showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
-      coin: "Bitcoin",
-      scriptType: BTCInputScriptType.SpendP2SHWitness
-    },
-    {
-      addressNList: [0x80000000 + 44, 0x80000000 + 2, 0x80000000 + 0],
-      curve: "secp256k1",
-      showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
-      coin: "Litecoin"
-    },
-    {
-      addressNList: hardenedPath,
-      curve: "secp256k1",
-      showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
-      coin: isPortis(wallet) ? "Bitcoin" : "Ethereum"
     }
+    // {
+    //   addressNList: [0x80000000 + 44, 0x80000000 + 0, 0x80000000 + 1],
+    //   curve: "secp256k1",
+    //   showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
+    //   coin: "Bitcoin"
+    // },
+    // {
+    //   addressNList: [0x80000000 + 49, 0x80000000 + 0, 0x80000000 + 0],
+    //   curve: "secp256k1",
+    //   showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
+    //   coin: "Bitcoin",
+    //   scriptType: BTCInputScriptType.SpendP2SHWitness
+    // },
+    // {
+    //   addressNList: [0x80000000 + 44, 0x80000000 + 2, 0x80000000 + 0],
+    //   curve: "secp256k1",
+    //   showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
+    //   coin: "Litecoin"
+    // },
+    // {
+    //   addressNList: hardenedPath,
+    //   curve: "secp256k1",
+    //   showDisplay: true, // Not supported by TrezorConnect or Ledger, but KeepKey should do it
+    //   coin: isPortis(wallet) ? "Bitcoin" : "Ethereum"
+    // }
   ])
 
   $manageResults.val(JSON.stringify(result))
@@ -449,7 +455,7 @@ $fioAddr.on('click', async (e) => {
 
     let res = await wallet.fioGetAddress({
       addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
-      coin: "Fio",
+      coin: "Bitcoin",
       scriptType: 'p2pkh',
       showDisplay: true
     })
