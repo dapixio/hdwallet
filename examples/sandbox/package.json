@@ -10,6 +10,7 @@
     "clean": "rm -rf dist .cache"
   },
   "dependencies": {
+    "@fioprotocol/fiojs": "^0.5.1",
     "@shapeshiftoss/hdwallet-core": "^0.18.2",
     "@shapeshiftoss/hdwallet-keepkey-tcp": "^0.18.2",
     "@shapeshiftoss/hdwallet-keepkey-webusb": "^0.18.2",

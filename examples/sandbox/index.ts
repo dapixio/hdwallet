@@ -32,6 +32,12 @@ import * as dashTxJson from './json/dashTx.json'
 import * as dogeTxJson from './json/dogeTx.json'
 import * as ltcTxJson from './json/ltcTx.json'
 
+import { Ecc } from '@fioprotocol/fiojs'
+import { fromBase58 } from 'bip32'
+// import bip32 from 'bip32'
+// const { Ecc } = require('fiojs')
+// bip32 = require('bip32')
+
 const keyring = new Keyring()
 
 const portisAppId = 'ff763d3d-9e34-45a1-81d1-caa39b9c64f9'
@@ -450,20 +456,21 @@ function supportsFIO(wallet) { return true }
 
 $fioAddr.on('click', async (e) => {
   e.preventDefault()
-  if (!wallet) { $fioResults.val("No wallet?"); return}
-  if (supportsFIO(wallet)) {
-
-    let res = await wallet.fioGetAddress({
-      addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
-      coin: "Bitcoin",
-      scriptType: 'p2pkh',
+  const fioPublicKeys = await wallet.getPublicKeys([
+    {
+      addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0 ,0],
+      curve: "secp256k1",
       showDisplay: true
-    })
-    $fioResults.val(res)
-  } else {
-    let label = await wallet.getLabel()
-    $fioResults.val(label + " does not support FIO")
-  }
+    }
+  ])
+
+  const { PublicKey } = Ecc
+  // const bip = bip32.fromBase58('xpub6GxtAJcF1aJ4Xz4yjpnf5rRqYguHfG9dgg1YATRACR7sB1e87fpDsWbRFnTsXdCxwAMhwYLW5BgDjGUCJirHgCiDYwoPRSo4txYMhg2zekD') 
+  const bip = fromBase58(fioPublicKeys[0]) 
+  const pubkey = PublicKey.fromBuffer(bip.publicKey) 
+  pubkey.toString('FIO')
+
+  $fioAddr.val(pubkey)
 })
 
 $fioVerify.on('click', async (e) => {
