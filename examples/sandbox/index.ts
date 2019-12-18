@@ -188,7 +188,7 @@ $fioAddr.on('click', async (e) => {
   ])
 
   const { PublicKey } = Ecc
-  const bip = fromBase58(fioPublicKeys[0])
+  const bip = fromBase58(fioPublicKeys[0].xpub)
   const pubkey = PublicKey.fromBuffer(bip.publicKey)
   console.log(pubkey.toString('FIO'));
   window.open(`https://giveaway.fio.foundation/?referrer=edge&fpk=${pubkey.toString('FIO')}`)
