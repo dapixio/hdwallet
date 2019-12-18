@@ -30,6 +30,7 @@ let wallet
 window['wallet'] = wallet
 
 const $keepkey = $('#keepkey')
+const $loader = $('#waitdevice')
 
 $keepkey.on('click', async (e) => {
   e.preventDefault()
@@ -38,26 +39,6 @@ $keepkey.on('click', async (e) => {
   window['wallet'] = wallet
   if (!wallet) {
     return alert('No wallet')
-  }
-
-  await timeout(6000)
-  try {
-    console.log('getPublicKeys')
-    const fioPublicKeys = await wallet.getPublicKeys([
-      {
-        addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
-        curve: "secp256k1",
-        showDisplay: true
-      }
-    ])
-    console.log('Finished getPublicKeys')
-    const { PublicKey } = Ecc
-    const bip = fromBase58(fioPublicKeys[0].xpub)
-    const pubkey = PublicKey.fromBuffer(bip.publicKey)
-    window.open(`https://giveaway.fio.foundation/?referrer=shapeshift&fpk=${pubkey.toString('FIO')}`)
-  } catch (e) {
-    console.log(e);
-    alert('There was an issue creating FIO address, please write to support')
   }
 
 })
@@ -97,10 +78,30 @@ window['pinOpen'] = function () {
   document.getElementById('#pinModal').className = 'modale opened'
 }
 
-window['pinEntered'] = function () {
+window['pinEntered'] = async () => {
   let input = document.getElementById('#pinInput')
   wallet.sendPin(input.value);
   document.getElementById('#pinModal').className = 'modale';
+
+  try {
+    $loader.css('display', 'flex')
+    const fioPublicKeys = await wallet.getPublicKeys([
+      {
+        addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
+        curve: "secp256k1",
+        showDisplay: true
+      }
+    ])
+    $loader.css('display', 'none')
+    const { PublicKey } = Ecc
+    const bip = fromBase58(fioPublicKeys[0].xpub)
+    const pubkey = PublicKey.fromBuffer(bip.publicKey)
+    window.open(`https://giveaway.fio.foundation/?referrer=shapeshift&fpk=${pubkey.toString('FIO')}`)
+  } catch (e) {
+    console.log(e);
+    alert('There was an issue creating FIO address, please write to support')
+    $loader.css('display', 'none')
+  }
 }
 
 window['passphraseOpen'] = function () {
@@ -160,9 +161,3 @@ $cancel.on('click', async (e) => {
 
   await wallet.cancel()
 })
-
-const timeout = async (ms) => {
-  await new Promise(resolve => {
-    setTimeout(resolve, ms)
-  })
-}
