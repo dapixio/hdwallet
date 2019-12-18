@@ -71,71 +71,60 @@
     .modal-header h2 {
       font-size: 20px;
     }
-    #waitdevice {
+    #keyring {
       display: none;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,.2);
-      cursor: wait;
     }
   </style>
 </head>
 
 <body>
-  <div class="container" style="padding-top:4em; text-align: center">
-    <button class="button button-outline" id='keepkey'>Get a Free FIO Address</button>
-  </div>
-  <div id="#pinModal" class="modale" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <h3>Enter PIN</h3>
-        <p>Use the PIN layout shown on your device to find the location to press on this PIN pad.</p>
-      </div>
-      <div class="modal-body">
-        <button onclick="handlePinDigit(7)" class="button button-outline">&#x25CF;</button>&nbsp;
-        <button onclick="handlePinDigit(8)" class="button button-outline">&#x25CF;</button>&nbsp;
-        <button onclick="handlePinDigit(9)" class="button button-outline">&#x25CF;</button><br>
-        <button onclick="handlePinDigit(4)" class="button button-outline">&#x25CF;</button>&nbsp;
-        <button onclick="handlePinDigit(5)" class="button button-outline">&#x25CF;</button>&nbsp;
-        <button onclick="handlePinDigit(6)" class="button button-outline">&#x25CF;</button><br>
-        <button onclick="handlePinDigit(1)" class="button button-outline">&#x25CF;</button>&nbsp;
-        <button onclick="handlePinDigit(2)" class="button button-outline">&#x25CF;</button>&nbsp;
-        <button onclick="handlePinDigit(3)" class="button button-outline">&#x25CF;</button><br>
-        <input id="#pinInput" type="text" style="-webkit-text-security: disc;"/>
-        <button onclick="handlePinDigit('')" class="button button-outline">x</button>
-      </div>
-      <div class="modal-footer">
-        <button class="button button-outline" onclick="pinEntered()">Unlock</button>
-      </div>
+<div class="container" style="padding-top:4em;text-align: center">
+  <button id='keepkey'>Pair KeepKey</button>
+  <button class="button button-outline" id='fioAddr'>Get a Free FIO Address</button>
+  <select id='keyring' style="height: 100px" size="4"></select>
+</div>
+<div id="#pinModal" class="modale" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3>Enter PIN</h3>
+      <p>Use the PIN layout shown on your device to find the location to press on this PIN pad.</p>
+    </div>
+    <div class="modal-body">
+      <button onclick="handlePinDigit(7)" class="button button-outline">&#x25CF;</button>&nbsp;
+      <button onclick="handlePinDigit(8)" class="button button-outline">&#x25CF;</button>&nbsp;
+      <button onclick="handlePinDigit(9)" class="button button-outline">&#x25CF;</button><br>
+      <button onclick="handlePinDigit(4)" class="button button-outline">&#x25CF;</button>&nbsp;
+      <button onclick="handlePinDigit(5)" class="button button-outline">&#x25CF;</button>&nbsp;
+      <button onclick="handlePinDigit(6)" class="button button-outline">&#x25CF;</button><br>
+      <button onclick="handlePinDigit(1)" class="button button-outline">&#x25CF;</button>&nbsp;
+      <button onclick="handlePinDigit(2)" class="button button-outline">&#x25CF;</button>&nbsp;
+      <button onclick="handlePinDigit(3)" class="button button-outline">&#x25CF;</button><br>
+      <input id="#pinInput" type="text" style="-webkit-text-security: disc;"/>
+      <button onclick="handlePinDigit('')" class="button button-outline">x</button>
+    </div>
+    <div class="modal-footer">
+      <button class="button button-outline" onclick="pinEntered()">Unlock</button>
     </div>
   </div>
+</div>
 
-  <div id="#passphraseModal" class="modale" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <h3>Enter Passphrase</h3>
-        <p>Enter your BIP39 Passphrase.</p>
-      </div>
-      <div class="modal-body">
-        <form><input id="#passphraseInput" type="password" autocomplete="bip39-passphrase"/></form>
-      </div>
-      <div class="modal-footer">
-        <button class="button button-outline" onclick="passphraseEntered()">Unlock</button>
-      </div>
+<div id="#passphraseModal" class="modale" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3>Enter Passphrase</h3>
+      <p>Enter your BIP39 Passphrase.</p>
+    </div>
+    <div class="modal-body">
+      <form><input id="#passphraseInput" type="password" autocomplete="bip39-passphrase"/></form>
+    </div>
+    <div class="modal-footer">
+      <button class="button button-outline" onclick="passphraseEntered()">Unlock</button>
     </div>
   </div>
+</div>
 
-  <div id="waitdevice">
-    Continue on your device...
-  </div>
-
-  <script src="https://unpkg.com/debug@4.0.1/dist/debug.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="./index.ts"></script>
+<script src="https://unpkg.com/debug@4.0.1/dist/debug.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="./index.ts"></script>
 </body>
 </html>
