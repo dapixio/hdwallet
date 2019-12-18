@@ -71,17 +71,24 @@
     .modal-header h2 {
       font-size: 20px;
     }
-    #keyring {
+    #wait-device {
       display: none;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,.2);
+      cursor: wait;
     }
   </style>
 </head>
 
 <body>
-  <div class="container" style="padding-top:4em;text-align: center">
-    <button id='keepkey'>Pair KeepKey</button>
-    <button class="button button-outline" id='fioAddr'>Get a Free FIO Address</button>
-    <select id='keyring' style="height: 100px" size="4"></select>
+  <div class="container" style="padding-top:4em; text-align: center">
+    <button class="button button-outline" id='keepkey'>Get a Free FIO Address</button>
   </div>
   <div id="#pinModal" class="modale" aria-hidden="true">
     <div class="modal-dialog">
@@ -121,6 +128,10 @@
         <button class="button button-outline" onclick="passphraseEntered()">Unlock</button>
       </div>
     </div>
+  </div>
+
+  <div id="wait-device">
+    Continue on your device...
   </div>
 
   <script src="https://unpkg.com/debug@4.0.1/dist/debug.js"></script>

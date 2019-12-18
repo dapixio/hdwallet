@@ -30,26 +30,37 @@ let wallet
 window['wallet'] = wallet
 
 const $keepkey = $('#keepkey')
-const $keyring = $('#keyring')
+const $loader = $('#wait-device')
 
 $keepkey.on('click', async (e) => {
   e.preventDefault()
   wallet = await keepkeyAdapter.pairDevice(undefined, /*tryDebugLink=*/true)
   listen(wallet.transport)
   window['wallet'] = wallet
-  $('#keyring select').val(wallet.transport.getDeviceID())
-})
 
-async function deviceConnected(deviceId) {
-  let wallet = keyring.get(deviceId)
-  if (!$keyring.find(`option[value="${deviceId}"]`).length) {
-    $keyring.append(
-      $("<option></option>")
-        .attr("value", deviceId)
-        .text(deviceId + ' - ' + await wallet.getVendor())
-    )
+  if (!wallet) {
+    return alert('No wallet')
   }
-}
+
+  try {
+    $loader.css('display', 'flex')
+    const fioPublicKeys = await wallet.getPublicKeys([
+      {
+        addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
+        curve: "secp256k1",
+        showDisplay: true
+      }
+    ])
+    $loader.css('display', 'none')
+    const { PublicKey } = Ecc
+    const bip = fromBase58(fioPublicKeys[0].xpub)
+    const pubkey = PublicKey.fromBuffer(bip.publicKey)
+    window.open(`https://giveaway.fio.foundation/?referrer=shapeshift&fpk=${pubkey.toString('FIO')}`)
+  } catch (e) {
+    console.log(e);
+    alert('There was an issue creating FIO address, please write to support')
+  }
+})
 
 (async () => {
   try {
@@ -57,40 +68,8 @@ async function deviceConnected(deviceId) {
   } catch (e) {
     console.error('Could not initialize KeepKeyAdapter', e)
   }
-
-  for (const [deviceID, wallet] of Object.entries(keyring.wallets)) {
-    await deviceConnected(deviceID)
-  }
-  $keyring.change(async (e) => {
-    if (wallet) {
-      await wallet.disconnect()
-    }
-    let deviceID = $keyring.find(':selected').val() as string
-    wallet = keyring.get(deviceID)
-    if (wallet) {
-      await wallet.transport.connect()
-      if (isKeepKey(wallet)) {
-        console.log("try connect debuglink")
-        await wallet.transport.tryConnectDebugLink()
-      }
-      await wallet.initialize()
-    }
-    window['wallet'] = wallet
-  })
   wallet = keyring.get()
   window['wallet'] = wallet
-  if (wallet) {
-    let deviceID = wallet.getDeviceID()
-    $keyring.val(deviceID).change()
-  }
-
-  keyring.on(['*', '*', Events.CONNECT], async (deviceId) => {
-    await deviceConnected(deviceId)
-  })
-
-  keyring.on(['*', '*', Events.DISCONNECT], async (deviceId) => {
-    $keyring.find(`option[value="${deviceId}"]`).remove()
-  })
 })()
 
 window['handlePinDigit'] = function (digit) {
@@ -168,28 +147,4 @@ $cancel.on('click', async (e) => {
     return
 
   await wallet.cancel()
-})
-
-const $appSymbol = $('#appSymbol')
-const $fioAddr = $('#fioAddr')
-
-$fioAddr.on('click', async (e) => {
-  e.preventDefault()
-  if (!wallet) {
-    $appSymbol.val("No wallet?");
-    return alert('No wallet')
-  }
-  const fioPublicKeys = await wallet.getPublicKeys([
-    {
-      addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
-      curve: "secp256k1",
-      showDisplay: true
-    }
-  ])
-
-  const { PublicKey } = Ecc
-  const bip = fromBase58(fioPublicKeys[0].xpub)
-  const pubkey = PublicKey.fromBuffer(bip.publicKey)
-  console.log(pubkey.toString('FIO'));
-  window.open(`https://giveaway.fio.foundation/?referrer=shapeshift&fpk=${pubkey.toString('FIO')}`)
 })
