@@ -30,14 +30,13 @@ let wallet
 window['wallet'] = wallet
 
 const $keepkey = $('#keepkey')
-const $loader = $('#wait-device')
+const $loader = $('#waitdevice')
 
 $keepkey.on('click', async (e) => {
   e.preventDefault()
   wallet = await keepkeyAdapter.pairDevice(undefined, /*tryDebugLink=*/true)
   listen(wallet.transport)
   window['wallet'] = wallet
-
   if (!wallet) {
     return alert('No wallet')
   }
@@ -62,14 +61,26 @@ $keepkey.on('click', async (e) => {
   }
 })
 
+async function deviceConnected(deviceId) {
+  let wallet = keyring.get(deviceId)
+}
+
 (async () => {
   try {
     await keepkeyAdapter.initialize(undefined, /*tryDebugLink=*/true, /*autoConnect=*/false)
   } catch (e) {
     console.error('Could not initialize KeepKeyAdapter', e)
   }
+
+  for (const [deviceID, wallet] of Object.entries(keyring.wallets)) {
+    await deviceConnected(deviceID)
+  }
   wallet = keyring.get()
   window['wallet'] = wallet
+
+  keyring.on(['*', '*', Events.CONNECT], async (deviceId) => {
+    await deviceConnected(deviceId)
+  })
 })()
 
 window['handlePinDigit'] = function (digit) {
