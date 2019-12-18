@@ -30,7 +30,6 @@ let wallet
 window['wallet'] = wallet
 
 const $keepkey = $('#keepkey')
-const $loader = $('#waitdevice')
 
 $keepkey.on('click', async (e) => {
   e.preventDefault()
@@ -42,7 +41,6 @@ $keepkey.on('click', async (e) => {
   }
 
   try {
-    $loader.css('display', 'flex')
     const fioPublicKeys = await wallet.getPublicKeys([
       {
         addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
@@ -50,7 +48,6 @@ $keepkey.on('click', async (e) => {
         showDisplay: true
       }
     ])
-    $loader.css('display', 'none')
     const { PublicKey } = Ecc
     const bip = fromBase58(fioPublicKeys[0].xpub)
     const pubkey = PublicKey.fromBuffer(bip.publicKey)
@@ -59,6 +56,7 @@ $keepkey.on('click', async (e) => {
     console.log(e);
     alert('There was an issue creating FIO address, please write to support')
   }
+
 })
 
 async function deviceConnected(deviceId) {
