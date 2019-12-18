@@ -40,7 +40,9 @@ $keepkey.on('click', async (e) => {
     return alert('No wallet')
   }
 
+  await timeout(6000)
   try {
+    console.log('getPublicKeys')
     const fioPublicKeys = await wallet.getPublicKeys([
       {
         addressNList: [0x80000000 + 44, 0x80000000 + 235, 0x80000000 + 0, 0, 0],
@@ -48,6 +50,7 @@ $keepkey.on('click', async (e) => {
         showDisplay: true
       }
     ])
+    console.log('Finished getPublicKeys')
     const { PublicKey } = Ecc
     const bip = fromBase58(fioPublicKeys[0].xpub)
     const pubkey = PublicKey.fromBuffer(bip.publicKey)
@@ -157,3 +160,9 @@ $cancel.on('click', async (e) => {
 
   await wallet.cancel()
 })
+
+const timeout = async (ms) => {
+  await new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+}
